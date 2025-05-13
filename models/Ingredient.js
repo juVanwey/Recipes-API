@@ -4,6 +4,9 @@ const ingredientSchema = new mongoose.Schema({
   name: { 
     type: String, 
     required: [true, 'Le nom de l\'ingrédient est obligatoire'],
+    match: /^[a-zA-ZÀ-ÿ0-9\s\-’']+$/,
+    // Regex pour valider les noms d'ingrédients (lettres, chiffres, espaces, tirets, apostrophes)
+
     trim: true,
     unique: true // Pour éviter les doublons
   },
@@ -11,10 +14,11 @@ const ingredientSchema = new mongoose.Schema({
     type: [String], 
     default: [] // Optionnel : liste d’allergènes
   },
-  unit: { 
-    type: String, 
-    enum: ['g', 'ml', 'cuillère', 'kg', 'L', 'tasse', 'pincée'], // Unités possibles
+  unit: {
+    type: String,
+    enum: ['g', 'ml', 'cuillère', 'kg', 'L', 'tasse', 'pincée', 'feuille', 'tranche', 'unité', "gousse", "cuillère à café", "cuillère à soupe", "verre", "sachet", "barquette", "bocal", "pot", "boîte", "barre"],
   },
+  // Unités possibles  
 }, { timestamps: true });
 
 module.exports = mongoose.model('Ingredient', ingredientSchema);

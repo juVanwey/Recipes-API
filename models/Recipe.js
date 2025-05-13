@@ -18,6 +18,9 @@ const recipeSchema = new mongoose.Schema(
       {
         ingredient: {
           type: mongoose.Schema.Types.ObjectId,
+          // Référence à l'ID d'un ingrédient existant
+          // On utilise mongoose.Schema.Types.ObjectId pour faire référence à un autre document dans MongoDB
+          // On utilise le modèle Ingredient pour faire référence à l'ID d'un ingrédient existant
           ref: "Ingredient",
           required: true,
         },
@@ -29,17 +32,7 @@ const recipeSchema = new mongoose.Schema(
         unit: {
           type: String,
           required: [true, "L'unité est obligatoire"],
-          enum: [
-            "g",
-            "ml",
-            "cuillère",
-            "kg",
-            "L",
-            "tasse",
-            "pincée",
-            "feuille",
-            "tranche",
-          ], // Unités possibles
+          enum: ['g', 'ml', 'cuillère', 'kg', 'L', 'tasse', 'pincée', 'feuille', 'tranche', 'unité', "gousse", "cuillère à café", "cuillère à soupe", "verre", "sachet", "barquette", "bocal", "pot", "boîte", "barre"],
         },
       },
     ],

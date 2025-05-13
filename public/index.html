@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipes API</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <h1 class="header-title">🍽️ Mes Recettes de Cuisine</h1>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- Bouton d'ajout d'une recette -->
+      <section class="add-recipe-section">
+        <button id="addRecipeBtn" class="add-button">
+          ➕ Ajouter une nouvelle recette
+        </button>
+      </section>
+
+      <!-- Filtres -->
+      <section class="filters-section">
+        <input
+          type="text"
+          id="filterTitle"
+          class="input-filter"
+          placeholder="Rechercher par titre"
+        />
+        <input
+          type="text"
+          id="filterIngredient"
+          class="input-filter"
+          placeholder="Rechercher par ingrédient"
+        />
+
+        <select id="filterCategory" class="select-filter">
+          <option value="">Catégorie</option>
+          <option value="entrée">Entrée</option>
+          <option value="plat">Plat</option>
+          <option value="dessert">Dessert</option>
+          <option value="accompagnement">Accompagnement</option>
+          <option value="boisson">Boisson</option>
+        </select>
+
+        <select id="filterDifficulty" class="select-filter">
+          <option value="">Difficulté</option>
+          <option value="facile">Facile</option>
+          <option value="moyen">Moyen</option>
+          <option value="difficile">Difficile</option>
+        </select>
+
+        <button id="applyFiltersBtn" class="filter-button">
+          🔍 Rechercher
+        </button>
+      </section>
+
+      <!-- Liste des recettes -->
+      <section id="recipesList" class="recipes-list">
+        <!-- Les cards de recettes sont insérées ici par JS -->
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>&copy; Julie V - <span id="currentYear"></span></p>
+    </footer>
+
+    <!-- === MODALE AJOUT DE RECETTE === -->
+    <div id="addModal" class="modal-overlay hidden">
+      <div class="modal">
+        <h2>Ajouter une Recette</h2>
+        <form id="addRecipeForm">
+          <label for="title">Titre de la recette :</label>
+          <input
+            type="text"
+            id="title"
+            placeholder="Titre de la recette"
+            required
+          />
+
+          <label>Ingrédients :</label>
+          <div id="ingredientInputsContainer"></div>
+          <button type="button" id="addIngredientField">
+            ➕ Ajouter un ingrédient
+            <!-- Les ingrédients sont insérés par JS -->
+          </button>
+          <!-- <div class="ingredient-input">
+            <input
+              type="text"
+              placeholder="Ingrédient"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Quantité"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Unité (optionnel)"
+            />
+          </div>             -->
+
+          <label for="instructions">Instructions :</label>
+          <textarea
+            id="instructions"
+            placeholder="Instructions"
+            required
+          ></textarea>
+
+          <label for="prepTime">Temps de préparation (min) :</label>
+          <input
+            type="number"
+            id="prepTime"
+            placeholder="Temps de préparation (min)"
+            required
+          />
+
+          <label for="cookTime">Temps de cuisson (min) :</label>
+          <input
+            type="number"
+            id="cookTime"
+            placeholder="Temps de cuisson (min)"
+            required
+          />
+
+          <label for="difficulty">Difficulté :</label>
+          <select id="difficulty" required>
+            <option value="">Difficulté</option>
+            <option value="facile">Facile</option>
+            <option value="moyen">Moyen</option>
+            <option value="difficile">Difficile</option>
+          </select>
+
+          <label for="category">Catégorie :</label>
+          <select id="category" required>
+            <option value="">Catégorie</option>
+            <option value="entrée">Entrée</option>
+            <option value="plat">Plat</option>
+            <option value="dessert">Dessert</option>
+            <option value="accompagnement">Accompagnement</option>
+            <option value="boisson">Boisson</option>
+          </select>
+
+          <label for="image">URL de l'image (optionnel) :</label>
+          <input
+            type="text"
+            id="image"
+            placeholder="URL de l'image (optionnel)"
+          />
+
+          <div class="modal-buttons">
+            <button type="submit">Ajouter</button>
+            <button type="button" id="closeModalBtn">Annuler</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- === MODALE MODIFICATION === -->
+    <div id="editModal" class="modal-overlay hidden">
+      <div class="modal">
+        <h2>Modifier la Recette</h2>
+        <form id="editRecipeForm">
+          <label for="editTitle">Titre :</label>
+          <input type="text" id="editTitle" required />
+
+          <label>Ingrédients :</label>
+          <div id="editIngredientInputsContainer"></div>
+          <button type="button" id="editAddIngredientField">
+            ➕ Ajouter un ingrédient
+            <!-- Les ingrédients sont gérés par JS -->
+          </button>
+
+          <label for="instructions">Instructions :</label>
+          <textarea
+            id="editInstructions"
+            placeholder="Instructions"
+            required
+          ></textarea>
+
+          <label for="editPrepTime">Temps de préparation (min) :</label>
+          <input type="number" id="editPrepTime" required />
+
+          <label for="editCookTime">Temps de cuisson (min) :</label>
+          <input type="number" id="editCookTime" required />
+
+          <label for="editDifficulty">Difficulté :</label>
+          <select id="editDifficulty" required>
+            <option value="facile">Facile</option>
+            <option value="moyen">Moyen</option>
+            <option value="difficile">Difficile</option>
+          </select>
+
+          <label for="editCategory">Catégorie :</label>
+          <select id="editCategory" required>
+            <option value="entrée">Entrée</option>
+            <option value="plat">Plat</option>
+            <option value="dessert">Dessert</option>
+            <option value="accompagnement">Accompagnement</option>
+            <option value="boisson">Boisson</option>
+          </select>
+
+          <label for="editImage">URL de l'image (optionnel) :</label>
+          <input type="text" id="editImage" placeholder="URL de l'image" />
+
+          <div class="modal-buttons">
+            <button type="submit">Mettre à jour</button>
+            <button type="button" onclick="closeEditModal()">Annuler</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- === MODALE SUPPRESSION === -->
+    <div id="deleteModal" class="modal-overlay hidden">
+      <div class="modal">
+        <h2>Supprimer la Recette ?</h2>
+        <p>Êtes-vous sûr de vouloir supprimer cette recette ?</p>
+        <div class="modal-buttons">
+          <button id="confirmDeleteBtn">Oui, supprimer</button>
+          <button type="button" onclick="closeDeleteModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT JS -->
+    <script src="./app.js"></script>
+  </body>
+</html>

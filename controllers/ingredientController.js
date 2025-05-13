@@ -57,6 +57,22 @@ exports.createIngredient = async (req, res) => {
   }
 };
 
+// Récupérer les unités possibles des ingrédients
+exports.getUnits = async (req, res) => {
+  try {
+    // On prend simplement un exemple d'ingrédient pour récupérer les unités définies dans le modèle
+    const ingredient = await Ingredient.findOne();
+    if (!ingredient) {
+      return res.status(404).json({ message: 'Aucun ingrédient trouvé' });
+    }
+
+    // Retourner les unités disponibles du schéma d'ingrédient
+    res.status(200).json(ingredient.schema.obj.unit.enum);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération des unités', error: error.message });
+  }
+};
+
 // .find() et .findOne()
 // Ingredient.find() :
 // ➜ Récupère tous les ingrédients de la base.

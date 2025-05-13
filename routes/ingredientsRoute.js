@@ -6,5 +6,7 @@ const ingredientController = require('../controllers/ingredientController'); // 
 router.get('/', ingredientController.getAllIngredients); 
 // Route POST pour créer un nouvel ingrédient
 router.post('/', ingredientController.createIngredient);
+// Route GET pour obtenir les unités des ingrédients
+router.get('/units', ingredientController.getUnits);
 
 module.exports = router;  // On exporte le routeur pour pouvoir l'utiliser dans le fichier principal (server.js).

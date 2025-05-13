@@ -1,4 +1,5 @@
 // Importation des modules nécessaires
+const cors = require('cors');
 const express = require('express');   // Framework minimaliste pour créer des serveurs web en Node.js, l'API (API = application qui sert des données). Permet de gérer facilement les requêtes HTTP (GET, POST, PUT, DELETE, etc.).
 const mongoose = require('mongoose'); // ORM pour MongoDB. Permet de modéliser les données sous forme d'objets JavaScript et de les enregistrer dans la base de données MongoDB.
 const bodyParser = require('body-parser'); // Middleware pour parser le corps des requêtes HTTP (principalement pour les requêtes POST). Permet de récupérer les données envoyées dans le corps des requêtes et de les transformer en objets JavaScript.
@@ -12,6 +13,14 @@ const port = process.env.PORT || 3000;
 
 // Middleware pour parser le corps des requêtes JSON
 app.use(bodyParser.json());
+
+// Autoriser toutes les origines
+app.use(cors());
+// Ou pour autoriser des origines spécifiques
+// app.use(cors({ origin: 'http://localhost:3000' }));
+
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Connexion à MongoDB via Mongoose
 mongoose.connect(process.env.MONGO_URI
@@ -31,6 +40,7 @@ mongoose.connect(process.env.MONGO_URI
 app.use('/api/ingredients', require('./routes/ingredientsRoute')); // Routes pour gérer les ingrédients. Toutes les requêtes qui commencent par /api/ingredients seront gérées par le fichier de routes ingredientsRoute.js dans le dossier routes.
 app.use('/api/recipes', require('./routes/recipesRoute')); // Routes pour gérer les recettes
 // "Si quelqu’un appelle une URL qui commence par /api/recipes, envoie ça dans le fichier recipesRoute.js."
+
 
 // Démarrage du serveur et écoute sur le port défini
 app.listen(port, () => {
