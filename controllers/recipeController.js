@@ -1,13 +1,14 @@
 // Importation des modèles Recipe et Ingredient
 const Recipe = require("../models/Recipe");
 const Ingredient = require("../models/Ingredient");
+const { log } = require("console");
 
 // Récupérer toutes les recettes
 exports.getAllRecipes = async (req, res) => {
   try {
     // Recherche toutes les recettes et peupler les détails des ingrédients
     const recipes = await Recipe.find().populate("ingredients.ingredient");
-    
+
     // Envoie la liste des recettes trouvées en réponse
     res.status(200).json(recipes);
   } catch (error) {
@@ -19,7 +20,7 @@ exports.getAllRecipes = async (req, res) => {
 // Rechercher des recettes selon différents critères
 exports.searchRecipes = async (req, res) => {
   const { title, ingredient, category } = req.query;
-  
+
   // Initialisation d'un objet de filtrage vide
   const filter = {};
 
@@ -41,7 +42,7 @@ exports.searchRecipes = async (req, res) => {
   try {
     // Recherche des recettes correspondant au filtre
     const recipes = await Recipe.find(filter).populate("ingredients.ingredient");
-    
+
     // Envoie les recettes trouvées en réponse
     res.status(200).json(recipes);
   } catch (error) {
@@ -141,36 +142,41 @@ exports.createRecipe = async (req, res) => {
 // Mettre à jour une recette existante
 exports.updateRecipe = async (req, res) => {
   try {
-    console.log(req.body)
     // Extraction des données envoyées dans la requête
     const { title, ingredients, instructions, prepTime, cookTime, difficulty, category, image } = req.body;
 
     // Ingrédients : vérification de leur existence et création si nécessaire
     const updatedIngredients = [];
     for (const item of ingredients) {
-      const { name, quantity, unit } = item;
+
+
+      const { name, unit } = item.ingredient;      
 
       // Recherche de l'ingrédient par son nom
-      let ingredient = await Ingredient.findOne({ name: { $regex: new RegExp(`^${name}$`, "i") } });
+      let ingredient = await Ingredient.findOne({ name: name });
+
 
       if (!ingredient) {
         // Si l'ingrédient n'existe pas, on le crée
-        ingredient = await Ingredient.create({ name, unit });
+
+        ingredient = new Ingredient({ name, unit });
+        await ingredient.save()
       }
 
       updatedIngredients.push({
         ingredient: ingredient._id,
-        quantity,
-        unit
+        quantity: item.quantity,
+        unit: item.ingredient.unit
       });
     }
+    
 
     // Mise à jour de la recette avec l'ID dans l'URL et les nouvelles données
     const updatedRecipe = await Recipe.findByIdAndUpdate(
       req.params.id,
       {
         title,
-        ingredients: resolvedIngredients, // On met à jour les ingrédients
+        ingredients: updatedIngredients, // On met à jour les ingrédients
         instructions,
         prepTime,
         cookTime,
@@ -187,6 +193,8 @@ exports.updateRecipe = async (req, res) => {
     // Réponse de succès avec la recette mise à jour
     res.status(200).json({ message: "Recette mise à jour", recipe: updatedRecipe });
   } catch (error) {
+    console.log(error);
+
     // En cas d'erreur lors de la mise à jour, renvoyer une erreur 400
     res.status(400).json({ message: "Erreur lors de la mise à jour", error });
   }

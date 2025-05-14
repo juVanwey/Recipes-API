@@ -1,19 +1,32 @@
-/* === RESET SIMPLE === */
+/* === GLOBALS === */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+html,
+body {
+  height: 100%;
+}
+
 body {
   font-family: "Segoe UI", sans-serif;
   background-color: #fff8f0;
   color: #333;
   line-height: 1.6;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1; /* Permet au contenu de prendre tout l'espace restant, poussant le footer vers la ba */
 }
 
 /* === HEADER === */
-.header {
+header {
   background-color: #ffd6e0;
   padding: 20px;
   border-radius: 10px;
@@ -29,11 +42,11 @@ body {
 /* === BOUTON AJOUT === */
 .add-recipe-section {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .add-button {
-  background-color: #ffeb3b;
-  color: #333;
+  background-color: #ff4d79;
+  color: white;
   border: none;
   padding: 12px 24px;
   font-size: 1rem;
@@ -42,10 +55,7 @@ body {
   transition: background-color 0.2s ease-in-out;
 }
 .add-button:hover {
-  background-color: #fdd835;
-}
-.add-button:focus {
-  outline: 2px solid #ff4d79;
+  background-color: #e91e63;
 }
 
 /* === FILTRES === */
@@ -59,11 +69,16 @@ body {
 .input-filter,
 .select-filter {
   padding: 10px;
-  border: 2px solid #ffd6e0;
+  border: 1px solid #ffd6e0;
   border-radius: 8px;
-  font-size: 0.95rem;
-  min-width: 180px;
+  min-width: 200px;
 }
+
+.input-filter:focus,
+.select-filter:focus {
+  outline: 2px solid #ff4d79;
+}
+
 .filter-button {
   background-color: #ff4d79;
   color: white;
@@ -76,11 +91,8 @@ body {
 .filter-button:hover {
   background-color: #e91e63;
 }
-.filter-button:focus {
-  outline: 2px solid #ffeb3b;
-}
 
-/* === LISTE DES RECETTES === */
+/* === LISTE RECETTES === */
 .recipes-list {
   display: flex;
   flex-wrap: wrap;
@@ -88,13 +100,13 @@ body {
   justify-content: center;
 }
 
-/* === CARD DE RECETTE === */
+/* === CARD RECETTE === */
 .recipe-card {
   background-color: #fff;
   border: 2px solid #ffe0f0;
-  border-radius: 12px;
+  /* border-radius: 15px; */
   box-shadow: 0 4px 8px rgba(255, 105, 135, 0.1);
-  width: 300px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease-in-out;
@@ -108,7 +120,7 @@ body {
   object-fit: cover;
 }
 .recipe-card-content {
-  padding: 15px;
+  padding: 20px;
   flex: 1;
 }
 .recipe-title {
@@ -118,6 +130,7 @@ body {
   color: #ff4d79;
 }
 .recipe-meta {
+  /* catégorie, difficulté, temps */
   font-size: 0.9rem;
   margin-bottom: 5px;
 }
@@ -149,14 +162,15 @@ body {
 }
 
 /* === FOOTER === */
-.footer {
+footer {
   margin-top: 40px;
+  margin-bottom: 20px;
   text-align: center;
   color: #999;
   font-size: 0.9rem;
 }
 
-/* === MODALE === */
+/* === MODALES === */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -184,11 +198,11 @@ body {
   background-color: #fff;
   padding: 30px;
   border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
+  width: 100%;
+  max-width: 700px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   animation: slideIn 0.3s ease-out;
-  max-height: 80vh; /* Limite la hauteur de la modale */
+  max-height: 90vh; /* Limite la hauteur de la modale */
   overflow-y: auto; /* Ajoute la barre de défilement verticale si nécessaire */
 }
 @keyframes slideIn {
@@ -217,7 +231,7 @@ body {
 .modal input:focus,
 .modal textarea:focus,
 .modal select:focus {
-  outline: 2px solid #ffeb3b;
+  outline: 2px solid #ff4d79;
 }
 .modal-buttons {
   display: flex;
@@ -231,9 +245,14 @@ body {
   cursor: pointer;
 }
 .modal-buttons button[type="submit"] {
-  background-color: #ffeb3b;
-  color: #333;
+  background-color: #ff4d79;
+  color: white;
 }
+
+.modal-buttons button[type="submit"]:hover {
+  background-color: #e91e63;
+}
+
 .modal-buttons button[type="button"] {
   background-color: #ccc;
   color: #333;
@@ -245,10 +264,26 @@ body {
 }
 
 /* === INGREDIENT INPUTS === */
+
+/* Bouton d'ajout d'un ingrédient */
+#addIngredientField,
+#editAddIngredientField {
+  background: none;
+  border: none;
+  background-color: #ffd6e0;
+  color: #333;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  display: block;
+  margin-bottom: 15px;
+}
+
 .ingredient-input {
   display: flex;
+  align-items: center;
   gap: 10px;
-  margin-bottom: 15px;
+  flex-wrap: nowrap;
 }
 
 .ingredient-input input,
@@ -256,13 +291,38 @@ body {
   padding: 10px;
   border: 2px solid #ffd6e0;
   border-radius: 8px;
-  font-size: 0.95rem;
 }
 
-.ingredient-input input[type="number"] {
-  width: 80px;
+.ingredient-input input.ingredient-name {
+  width: 250px;
 }
 
-.ingredient-input select {
+.ingredient-input input.ingredient-qty {
   width: 100px;
+}
+
+.ingredient-input select.ingredient-unit {
+  width: 120px;
+}
+
+/* Bouton de suppression (croix) */
+.ingredient-input .remove-ingredient {
+  background: none;
+  border: none;
+  color: #ff4d79;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+}
+
+#recipeTitle {
+  margin-bottom: 20px;
+  color: #ff4d79;
+}
+
+.recipe-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

@@ -8,12 +8,12 @@
   </head>
   <body>
     <!-- HEADER -->
-    <header class="header">
-      <h1 class="header-title">🍽️ Mes Recettes de Cuisine</h1>
+    <header>
+      <h1 class="header-title">🍽️ Mes recettes de cuisine</h1>
     </header>
 
     <!-- MAIN -->
-    <main class="main">
+    <main>
       <!-- Bouton d'ajout d'une recette -->
       <section class="add-recipe-section">
         <button id="addRecipeBtn" class="add-button">
@@ -64,14 +64,14 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="footer">
+    <footer>
       <p>&copy; Julie V - <span id="currentYear"></span></p>
     </footer>
 
     <!-- === MODALE AJOUT DE RECETTE === -->
     <div id="addModal" class="modal-overlay hidden">
       <div class="modal">
-        <h2>Ajouter une Recette</h2>
+        <h2>Ajouter une recette</h2>
         <form id="addRecipeForm">
           <label for="title">Titre de la recette :</label>
           <input
@@ -85,24 +85,7 @@
           <div id="ingredientInputsContainer"></div>
           <button type="button" id="addIngredientField">
             ➕ Ajouter un ingrédient
-            <!-- Les ingrédients sont insérés par JS -->
           </button>
-          <!-- <div class="ingredient-input">
-            <input
-              type="text"
-              placeholder="Ingrédient"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Quantité"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Unité (optionnel)"
-            />
-          </div>             -->
 
           <label for="instructions">Instructions :</label>
           <textarea
@@ -163,7 +146,7 @@
     <!-- === MODALE MODIFICATION === -->
     <div id="editModal" class="modal-overlay hidden">
       <div class="modal">
-        <h2>Modifier la Recette</h2>
+        <h2>Modifier la recette</h2>
         <form id="editRecipeForm">
           <label for="editTitle">Titre :</label>
           <input type="text" id="editTitle" required />
@@ -172,7 +155,6 @@
           <div id="editIngredientInputsContainer"></div>
           <button type="button" id="editAddIngredientField">
             ➕ Ajouter un ingrédient
-            <!-- Les ingrédients sont gérés par JS -->
           </button>
 
           <label for="instructions">Instructions :</label>
@@ -219,7 +201,7 @@
     <div id="deleteModal" class="modal-overlay hidden">
       <div class="modal">
         <h2>Supprimer la Recette ?</h2>
-        <p>Êtes-vous sûr de vouloir supprimer cette recette ?</p>
+        <p>Êtes-vous sûr(e) de vouloir supprimer cette recette ?</p>
         <div class="modal-buttons">
           <button id="confirmDeleteBtn">Oui, supprimer</button>
           <button type="button" onclick="closeDeleteModal()">Annuler</button>
