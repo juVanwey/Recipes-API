@@ -150,7 +150,8 @@ exports.updateRecipe = async (req, res) => {
     for (const item of ingredients) {
 
 
-      const { name, unit } = item.ingredient;      
+      const { name, unit } = item.ingredient;
+      
 
       // Recherche de l'ingrédient par son nom
       let ingredient = await Ingredient.findOne({ name: name });

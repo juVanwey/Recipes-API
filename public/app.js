@@ -154,7 +154,7 @@ document
   ?.addEventListener("click", async () => {
     const container = document.getElementById("ingredientInputsContainer");
     const row = document.createElement("div");
-    row.classList.add("ingredient-input");
+    row.classList.add("ingredient-row");
 
     // Récupérer les unités à partir de l'API
     const units = await getUnits();
@@ -168,14 +168,14 @@ document
     <input type="text" placeholder="Nom de l'ingrédient" class="ingredient-name" required />
     <input type="number" placeholder="Quantité" class="ingredient-qty" min="0.01" step="0.01" required />
     <select class="ingredient-unit" required>
-      <option value="">Unité</option>
+      <option value="">Sélectionnez l'unité</option>
       ${unitOptions}
     </select>
-    <button type="button" class="remove-ingredient">❌</button>
+    <button type="button" class="removeIngredient">❌</button>
   `;
 
     // Ajoute un écouteur d'événements pour supprimer cette ligne si l'utilisateur clique sur ❌
-    row.querySelector(".remove-ingredient")?.addEventListener("click", () => {
+    row.querySelector(".removeIngredient")?.addEventListener("click", () => {
       row.remove();
     });
 
@@ -307,16 +307,16 @@ async function editRecipe(recipeId) {
 // Fonction utilitaire pour créer une ligne d'ingrédient
 function createIngredientRow(name = "", quantity = "", unit = "", unitOptions) {
   const row = document.createElement("div");
-  row.classList.add("ingredient-input");
+  row.classList.add("ingredient-row");
 
   row.innerHTML = `
     <input type="text" value="${name}" placeholder="Nom de l'ingrédient" class="ingredient-name" required />
     <input type="number" value="${quantity}" placeholder="Quantité" class="ingredient-qty" min="0.01" step="0.01" required />
     <select class="ingredient-unit" required>
-      <option value="">Unité</option>
+      <option value="">Sélectionnez l'unité</option>
       ${unitOptions}
     </select>
-    <button type="button" class="remove-ingredient">❌</button>
+    <button type="button" class="removeIngredient">❌</button>
   `;
 
   // Pré-sélectionne l'unité si elle est fournie
@@ -326,7 +326,7 @@ function createIngredientRow(name = "", quantity = "", unit = "", unitOptions) {
 
   // Ajoute un écouteur d'événement pour supprimer la ligne
   row
-    .querySelector(".remove-ingredient")
+    .querySelector(".removeIngredient")
     .addEventListener("click", () => row.remove());
 
   return row;
