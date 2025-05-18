@@ -1,5 +1,6 @@
 // === GLOBALS ===
 
+
 // Fonction pour créer une card de recette
 function createRecipeCard(recipe) {
   // Création d'un élément <div> qui représentera la card
@@ -154,7 +155,7 @@ document
   ?.addEventListener("click", async () => {
     const container = document.getElementById("ingredientInputsContainer");
     const row = document.createElement("div");
-    row.classList.add("ingredient-row");
+    row.classList.add("ingredient-input");
 
     // Récupérer les unités à partir de l'API
     const units = await getUnits();
@@ -168,14 +169,14 @@ document
     <input type="text" placeholder="Nom de l'ingrédient" class="ingredient-name" required />
     <input type="number" placeholder="Quantité" class="ingredient-qty" min="0.01" step="0.01" required />
     <select class="ingredient-unit" required>
-      <option value="">Sélectionnez l'unité</option>
+      <option value="">Unité</option>
       ${unitOptions}
     </select>
-    <button type="button" class="removeIngredient">❌</button>
+    <button type="button" class="remove-ingredient">❌</button>
   `;
 
     // Ajoute un écouteur d'événements pour supprimer cette ligne si l'utilisateur clique sur ❌
-    row.querySelector(".removeIngredient")?.addEventListener("click", () => {
+    row.querySelector(".remove-ingredient")?.addEventListener("click", () => {
       row.remove();
     });
 
@@ -190,7 +191,7 @@ document
     e.preventDefault(); // Empêche l'envoi par défaut du formulaire (rechargement de page)
 
     const ingredientRows = document.querySelectorAll(
-      "#ingredientInputsContainer .ingredient-row"
+      "#ingredientInputsContainer .ingredient-input"
     );
     const ingredients = [];
 
@@ -199,7 +200,8 @@ document
       const name = row.querySelector(".ingredient-name").value.trim();
       const quantity = parseFloat(row.querySelector(".ingredient-qty").value);
       const unit = row.querySelector(".ingredient-unit").value.trim();
-
+      console.log(name);
+      
       if (name && !isNaN(quantity) && unit) {
         // Ajoute l'ingrédient à la liste des ingrédients si les informations sont valides
         ingredients.push({ name, quantity, unit });
@@ -228,6 +230,8 @@ document
       const data = await res.json(); // Récupère la réponse JSON du serveur
 
       if (res.ok) {
+        document.getElementById("addRecipeForm").reset()
+        document.getElementById("IngredientInputsContainer").innerHTML = "";
         alert("Recette ajoutée !"); // Affiche un message de succès
         loadRecipes(); // Recharge la liste des recettes
         document.getElementById("addModal").classList.add("hidden"); // Ferme la modale
@@ -263,7 +267,7 @@ async function editRecipe(recipeId) {
     // Gestion des ingrédients
     const container = document.getElementById("editIngredientInputsContainer");
     container.innerHTML = ""; // Réinitialise le conteneur des ingrédients
-    console.log(recipe);
+    
     
     const units = await getUnits(); // Récupère la liste des unités disponibles
     const unitOptions = units
@@ -272,6 +276,9 @@ async function editRecipe(recipeId) {
 
     // Pré-remplir les ingrédients existants dans la recette
     recipe.ingredients.forEach(({ ingredient, quantity, unit }) => {
+   
+      
+      
       if (ingredient) {
         
         container.appendChild(
@@ -307,16 +314,16 @@ async function editRecipe(recipeId) {
 // Fonction utilitaire pour créer une ligne d'ingrédient
 function createIngredientRow(name = "", quantity = "", unit = "", unitOptions) {
   const row = document.createElement("div");
-  row.classList.add("ingredient-row");
+  row.classList.add("ingredient-input");
 
   row.innerHTML = `
     <input type="text" value="${name}" placeholder="Nom de l'ingrédient" class="ingredient-name" required />
     <input type="number" value="${quantity}" placeholder="Quantité" class="ingredient-qty" min="0.01" step="0.01" required />
     <select class="ingredient-unit" required>
-      <option value="">Sélectionnez l'unité</option>
+      <option value="">Unité</option>
       ${unitOptions}
     </select>
-    <button type="button" class="removeIngredient">❌</button>
+    <button type="button" class="remove-ingredient">❌</button>
   `;
 
   // Pré-sélectionne l'unité si elle est fournie
@@ -326,7 +333,7 @@ function createIngredientRow(name = "", quantity = "", unit = "", unitOptions) {
 
   // Ajoute un écouteur d'événement pour supprimer la ligne
   row
-    .querySelector(".removeIngredient")
+    .querySelector(".remove-ingredient")
     .addEventListener("click", () => row.remove());
 
   return row;
@@ -354,7 +361,7 @@ document.getElementById("editRecipeForm").addEventListener("submit", async (e) =
   const image = document.getElementById("editImage").value;
 
   const ingredients = Array.from(
-    document.querySelectorAll("#editIngredientInputsContainer .ingredient-row")
+    document.querySelectorAll("#editIngredientInputsContainer .ingredient-input")
   )
     .map((row) => {
       const name = row.querySelector(".ingredient-name").value.trim();
@@ -383,7 +390,7 @@ document.getElementById("editRecipeForm").addEventListener("submit", async (e) =
     image,
     ingredients,
   };
-
+console.log("Recette mise à jour :", updatedRecipe);
   try {
     const res = await fetch(`/api/recipes/${recipeId}`, {
       method: "PUT",
